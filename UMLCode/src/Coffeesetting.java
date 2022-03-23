@@ -4,10 +4,13 @@ public class Coffeesetting extends JDialog{
     private JPanel panel1;
     private JLabel heatingTime;
     private JLabel coffeeTime;
-    private JLabel cupSize;
-    private JLabel heatTimeData;
-    private JLabel coffeetimeData;
-    private JLabel cupsizeData;
+    private JTextField heatTimeData;
+    private JTextField coffeetimeData;
+
+    private JButton btn_update;
+    private JTextField cupsizeData;
+    private JLabel cupsize;
+
 
     public Coffeesetting(String title){
         //super("Settings");
@@ -21,6 +24,20 @@ public class Coffeesetting extends JDialog{
 
         String c_size = setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_Cupsize");
         cupsizeData.setText(setting.parseJSON(c_size));
+        btn_update.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String heatTimeData_input = heatTimeData.getText();
+                setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_heatingtime/"+heatTimeData_input);
+
+                String coffeeTimeData_input = coffeetimeData.getText();
+                setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_coffeetime/"+coffeeTimeData_input);
+
+                String cupsizeData_input = cupsizeData.getText();
+                setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_cupsize/"+cupsizeData_input);
+
+            }
+        });
 
     }
     public static void main(String[] args) {
