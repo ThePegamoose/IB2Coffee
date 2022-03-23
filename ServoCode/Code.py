@@ -8,6 +8,8 @@ import requests
 from time import sleep
 from gpiozero import MCP3008
 from numpy import log as ln
+import json
+import requests
 
 
 turnOnTime = 0  # time the coffee machine takes to heat
@@ -39,6 +41,32 @@ buzzState = False
 GPIO.setup(BUZZER, GPIO.OUT)
 
 timerList = []
+
+def updateStats():
+    d = datetime.datetime.now();
+    date = ""
+    if d.day < 10:
+        date += "0" + str(d.day)
+    else:
+        date += str(d.day)
+    if d.month < 10:
+        date += "0" + str(d.month)
+    else:
+        date += str(d.month)
+    date += str(d.year)
+    s = "https://studev.groept.be/api/a21ib2a04/getCount/"
+    s += date
+    ret = requests.get(s)
+    j = ret.json()
+    x = 0
+    for value in j:
+        x = value["count"]
+    if x == 0:
+        s = "https://studev.groept.be/api/a21ib2a04/addstat/" + date
+        requests.get(s)
+    else:
+        s = "https://studev.groept.be/api/a21ib2a04/inccount/" + date
+        requests.get(s)
 
 
 def getData():
@@ -197,70 +225,6 @@ def toggleCoffee():  # toggles coffee making on/off
 def get_status():
     return status
 
-"""
-def syncData():
-    active = False
-    i = 0
-    while i < len(alarmArray):
-        if alarmArray[i] in activeAlarm:
-            active = True
-        time = alarmArray[i]
-        command = "REPLACE INTO `a21ib2a04`.`alarm` (`index`, `time`, `active`) VALUES (%s, %s, %s);"
-        value = (i, time, active)
-        cursor.execute(command, value)
-        i += 1
-        mydb.commit()
-
-
-def date_to_string(date):
-    alarm = date.strftime("%A, %H:%M")
-    return alarm
-
-
-def setAlarm(alarmIndex):  # this function activates alarm
-    activeAlarm.append(alarmArray[alarmIndex])
-    syncData()
-
-
-def disableAlarm(activeIndex):  # removes alarm from active list
-
-    del activeAlarm[activeIndex]
-    syncData()
-
-
-def deleteAlarm(activeIndex, alarmIndex):  # disables alarm and removes it from list
-
-    disableAlarm(activeIndex)
-    del alarmArray[alarmIndex]
-    syncData()
-
-
-def getIndexActive(weekday, hour, minute):  # gets index of alarm in active alarm list
-    alarm = weekday + ", " + str(hour) + ":" + str(minute)
-    index = activeAlarm.index(alarm)
-    return index
-
-
-def getIndex(weekday, hour, minute):  # gets index of alarm in alarm list
-    alarm = weekday + ", " + str(hour) + ":" + str(minute)
-    index = alarmArray.index(alarm)
-    return index
-
-
-def checkalarm():  # actual alarm
-    currentTime = date_to_string(datetime.datetime.now())  # current time, resolution set to minutes
-    coffeeTime = datetime.datetime.now() + datetime.timedelta(seconds=timeToMakeCoffee)  # before alarm time to make coffee
-    coffeeTime2 = date_to_string(coffeeTime)  # coffee time, resolution set to minutes
-
-    if currentTime in activeAlarm:
-        activeIndex = activeAlarm.index(currentTime)
-        disableAlarm(activeIndex)
-
-    if coffeeTime2 in activeAlarm and coffeeOn:
-        makecoffee()
-        status = "started making coffee"
-        print(status)
-"""
 def checkalarm():
     syncData()  # alarm is synced with db
     currentTime = date_to_string(datetime.datetime.now())  # current time, converted to weekday format
@@ -306,20 +270,4 @@ while True:
         checktimer()
     elif mode == 1:
         checkalarm()
-
-"""
-    def newAlarm(weekday, hour, minute):
-    global status
-    alarm = weekday+", " + str(hour)+":"+str(minute)
-    if alarm not in alarmArray:
-        alarmArray.append(alarm)  # alarm is added to list
-        status = "new alarm, added to list"
-    if alarm not in activeAlarm:
-        alarmIndex = getIndex(weekday, hour, minute)  # index of alarm
-        setAlarm(alarmIndex)    # alarm is set active
-        status = "alarm set"
-    print(alarmArray)
-    print(activeAlarm)
-    print(status)
-    syncData()
-"""
+    updateStats()
