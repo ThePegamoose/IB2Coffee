@@ -263,7 +263,7 @@ def get_time():
 
 
 while True:
-    #checkwaterlevel()
+    checkwaterlevel()
     getData()
     syncData()
     if mode == 0:
@@ -271,3 +271,4 @@ while True:
     elif mode == 1:
         checkalarm()
     updateStats()
+    getTemp()
