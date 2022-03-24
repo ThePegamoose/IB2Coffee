@@ -55,6 +55,7 @@ public class CoffeeHome extends JFrame{
 
             }
         });
+        checkStats();
     }
     public  void cupPopup(){
 
@@ -62,13 +63,19 @@ public class CoffeeHome extends JFrame{
     }
     public void checkStats(){
         Date d = new Date();
+        String value;
         SimpleDateFormat formatter = new SimpleDateFormat("ddMMyyyy");
         String date = formatter.format(d);
         DB db2 = new DB();
         String ret = db2.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getCount/" + date);
         JSONArray array = new JSONArray(ret);
-        JSONObject ob = array.getJSONObject(0);
-        String value = ob.getString("count");
+        if(!array.isEmpty()){
+            JSONObject ob = array.getJSONObject(0);
+            value = ob.getString("count");
+        }
+        else{
+            value = "0";
+        }
         coffeeIntake.setText("Coffees drunk today: " + value + "  ");
 
         int total = Integer.parseInt(value);
@@ -79,7 +86,7 @@ public class CoffeeHome extends JFrame{
             ret = db2.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getCount/" + day);
             array = new JSONArray(ret);
             if(!array.isEmpty()){
-                ob = array.getJSONObject(0);
+                JSONObject ob = array.getJSONObject(0);
                 total += Integer.parseInt(ob.getString("count"));
             }
         }
