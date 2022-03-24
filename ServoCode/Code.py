@@ -124,6 +124,7 @@ def turn_servo(gpio):
 
 def makecoffee():
     global buzzState
+    updateStats()
     turn_servo(17)  # 17 27 22
     sleep(turnOnTime)
     if cupSize == 0:
@@ -270,5 +271,4 @@ while True:
         checktimer()
     elif mode == 1:
         checkalarm()
-    updateStats()
     getTemp()
