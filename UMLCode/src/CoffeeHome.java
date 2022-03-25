@@ -20,6 +20,8 @@ public class CoffeeHome extends JFrame{
     private JLabel logolabel;
     private JLabel coffeeIntake;
     private JButton btn_settings;
+    private JLabel WeeklyIntake;
+    private JTextArea textArea1;
 
 
     public CoffeeHome(String title) {
@@ -90,7 +92,12 @@ public class CoffeeHome extends JFrame{
                 total += Integer.parseInt(ob.getString("count"));
             }
         }
-        coffeeIntake.setText("Coffees drunk today: " + value + "  \n" + "Coffees drunk this week: " + total);
+        //coffeeIntake.setText("Coffees drunk today: " + value + "     ");
+        //WeeklyIntake.setText("Coffees drunk this week: " + total + "  ");
+        Font font1 = new Font("Dialog", Font.BOLD, 12);
+        //System.out.println(javax.swing.UIManager.getDefaults().getFont("Label.font"));
+        textArea1.setFont(font1);
+        textArea1.setText("Coffees drunk today:  "+ value + "      " + "\n" + "Coffees drunk this week: " + total + "    ");
 
     }
 
@@ -113,6 +120,4 @@ public class CoffeeHome extends JFrame{
 
 
     }
-
-
 }
