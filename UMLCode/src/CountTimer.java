@@ -36,7 +36,7 @@ public class CountTimer extends JDialog{
                 "Cancel"};
 
 
-        DBTest timerDB = new DBTest();
+        DB timerDB = new DB();
         String timer = timerDB.makeGETRequest("https://studev.groept.be/api/a21ib2a04/timerAll");
         String timerVal = timerDB.parseJSON(timer,"timerValue");
 
@@ -154,6 +154,9 @@ public class CountTimer extends JDialog{
                 }
                 if (minute == 0 && second == 0) {
                     timer1.stop();
+                    TempDisplay temp = new TempDisplay();
+                    temp.setSize(new Dimension(300, 150));
+                    temp.setVisible(true);
                 }
             }
         });

@@ -17,26 +17,27 @@ public class Coffeesetting extends JDialog{
     public Coffeesetting(String title){
         //super("Settings");
         setContentPane(panel1);
-        DBSettings setting = new DBSettings();
-        String h_time = setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_heatingTime");
-        heatTimeData.setText(setting.parseJSON(h_time));
+        //DBSettings setting = new DBSettings();
+        DB db = new DB();
+        String h_time = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_heatingTime");
+        heatTimeData.setText(db.parseJSON(h_time,"Value"));
 
-        String c_time = setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_coffeeTime");
-        coffeetimeData.setText(setting.parseJSON(c_time));
+        String c_time = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_coffeeTime");
+        coffeetimeData.setText(db.parseJSON(c_time,"Value"));
 
-        String c_size = setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_Cupsize");
-        cupsizeData.setText(setting.parseJSON(c_size));
+        String c_size = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/Settings_Cupsize");
+        cupsizeData.setText(db.parseJSON(c_size,"Value"));
         btn_update.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String heatTimeData_input = heatTimeData.getText();
-                setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_heatingtime/"+heatTimeData_input);
+                db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_heatingtime/"+heatTimeData_input);
 
                 String coffeeTimeData_input = coffeetimeData.getText();
-                setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_coffeetime/"+coffeeTimeData_input);
+                db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_coffeetime/"+coffeeTimeData_input);
 
                 String cupsizeData_input = cupsizeData.getText();
-                setting.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_cupsize/"+cupsizeData_input);
+                db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/update_cupsize/"+cupsizeData_input);
 
             }
         });

@@ -37,7 +37,7 @@ public class ClockForm extends JDialog {
         this.Hour= new JComboBox(HourArray);
         this.Day= new JComboBox(DayArray);
         Object[] var10000 = new Object[]{"OK", "Set New Alarm", "Cancel"};
-        DBTest AlarmDB = new DBTest();
+        DB AlarmDB = new DB();
         String ActiveAlarm=AlarmDB.makeGETRequest(   "http://mysql.studev.groept.be/api/a21ib2a04/getActiveAlarm");
         String ActiveAlarmVal = AlarmDB.parseJSON(ActiveAlarm, "time");
         String[] ActiveAlarmArray = ActiveAlarmVal.split("[,]", 0);
