@@ -3,6 +3,7 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -30,6 +31,11 @@ public class CoffeeHome extends JFrame{
     public CoffeeHome(String title) {
         super(title);
         setContentPane(panelMain);
+
+        DB dbMode = new DB();
+
+
+
         buttonClock.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -38,9 +44,11 @@ public class CoffeeHome extends JFrame{
                 //  clockForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 clockForm.pack();
                 clockForm.setVisible(true);
+                dbMode.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/mode");
                 waterPopup();
                 cupPopup();
                 temperaturePopUp();
+
 
             }
         });
@@ -50,6 +58,7 @@ public class CoffeeHome extends JFrame{
                 CountTimer  timerForm = new CountTimer();
                 timerForm.setSize(new Dimension(300,250));
                 timerForm.setVisible(true);
+                dbMode.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/mode");
                 waterPopup();
                 cupPopup();
                 temperaturePopUp();
@@ -84,7 +93,16 @@ public class CoffeeHome extends JFrame{
 
     public void temperaturePopUp(){
         DB db = new DB();
-        TempDisplay tempDP = new TempDisplay();
+
+        /*
+        tempDP.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/coffeeFinished");
+            }
+        });
+
+         */
         Timer timer = new javax.swing.Timer(2500, new ActionListener() {
 
             @Override
@@ -93,11 +111,10 @@ public class CoffeeHome extends JFrame{
                 check = db.parseJSON(info,"Value");
                 System.out.println(check);
                 if (check.equals("1")){
+                    TempDisplay tempDP = new TempDisplay();
                     tempDP.setVisible(true);
                     db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/coffeeFinished");
-                }
-                else {
-                    tempDP.setVisible(false);
+
                 }
             }
         });
