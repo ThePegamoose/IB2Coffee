@@ -75,6 +75,14 @@ public class CoffeeHome extends JFrame{
             }
         });
         checkStats();
+        
+        btn_CoffeeNow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"Dont forget to place your coffee cup");
+
+            }
+        });
     }
     public  void cupPopup(){
 
