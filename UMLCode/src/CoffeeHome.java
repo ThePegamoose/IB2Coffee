@@ -3,6 +3,7 @@ import org.json.JSONObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -23,10 +24,18 @@ public class CoffeeHome extends JFrame{
     private JLabel WeeklyIntake;
     private JTextArea textArea1;
 
+    private String check;
+    //private TempDisplay tempDP;
+
 
     public CoffeeHome(String title) {
         super(title);
         setContentPane(panelMain);
+
+        DB dbMode = new DB();
+
+
+
         buttonClock.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -35,6 +44,10 @@ public class CoffeeHome extends JFrame{
                 //  clockForm.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 clockForm.pack();
                 clockForm.setVisible(true);
+                dbMode.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/mode");
+                waterPopup();
+                cupPopup();
+                temperaturePopUp();
 
 
             }
@@ -45,6 +58,10 @@ public class CoffeeHome extends JFrame{
                 CountTimer  timerForm = new CountTimer();
                 timerForm.setSize(new Dimension(300,250));
                 timerForm.setVisible(true);
+                dbMode.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/mode");
+                waterPopup();
+                cupPopup();
+                temperaturePopUp();
 
             }
         });
@@ -63,6 +80,60 @@ public class CoffeeHome extends JFrame{
 
         JOptionPane.showMessageDialog(null,"Dont forget to place your coffee cup");
     }
+
+    public  void waterPopup(){
+        DB db = new DB();
+        String info = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getSetting/waterStatus");
+        String checkWater = db.parseJSON(info,"Value");
+        //System.out.println(check);
+        if (checkWater.equals("0")) {
+            JOptionPane.showMessageDialog(null, "Not enough water");
+        }
+    }
+
+    public void temperaturePopUp(){
+        DB db = new DB();
+
+        /*
+        tempDP.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/coffeeFinished");
+            }
+        });
+
+         */
+        Timer timer = new javax.swing.Timer(2500, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String info = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getSetting/coffeeFinished");
+                check = db.parseJSON(info,"Value");
+                System.out.println(check);
+                if (check.equals("1")){
+                    TempDisplay tempDP = new TempDisplay();
+                    tempDP.setVisible(true);
+                    db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/coffeeFinished");
+
+                }
+            }
+        });
+        timer.start();
+        /*
+        int temperatureValue = Integer.parseInt(tempDP.temperatureVal());
+        if (temperatureValue <50){
+            JOptionPane.showMessageDialog(null,"Coffee getting cold");
+        }
+         */
+
+    }
+
+    public String checkFinished(){
+
+        return check;
+
+    }
+
     public void checkStats(){
         Date d = new Date();
         String value;
@@ -102,15 +173,17 @@ public class CoffeeHome extends JFrame{
     }
 
 
+
+
     public static void main(String[] args) {
         String water ="0";
         CoffeeHome  frame = new CoffeeHome( "CoffeeApp");
         frame.setVisible(true);
-        frame.setSize(505,300);
+        frame.setSize(600,300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         DB db = new DB();
-        db.parseJSON(db.makeGETRequest( "https://studev.groept.be/api/a21ib2a04/waterlevel"));
-        db.parseJSON(db.makeGETRequest( "https://studev.groept.be/api/a21ib2a04/temperature"));
+        db.parseJSON(db.makeGETRequest( "https://studev.groept.be/api/a21ib2a04/waterlevel"),"Value");
+        db.parseJSON(db.makeGETRequest( "https://studev.groept.be/api/a21ib2a04/temperature"),"Value");
 
 
 

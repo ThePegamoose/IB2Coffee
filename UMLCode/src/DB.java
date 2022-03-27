@@ -54,6 +54,7 @@ public class DB {
         JOptionPane.showMessageDialog(null,"Coffee getting cold");
     }
 
+    /*
     public String parseJSON(String jsonString){
         String var ="";
 
@@ -79,13 +80,40 @@ public class DB {
         return var;
     }
 
+     */
 
+    public String parseJSON(String jsonString, String key){
+        String var = "";
+        try {
+            JSONArray array = new JSONArray(jsonString);
+            for (int i = 0; i < array.length(); i++)
+            {
+                JSONObject curObject = array.getJSONObject(i);
+                var += curObject.getString(key);
+                if (i != (array.length()-1))
+                {
+                    var += ", ";
+                }
+            }
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+        return var;
+    }
+
+
+
+//fix parseJSON for temperature!!!
+  /*
     public static void main(String[] args) {
         DB rc = new DB();
         String response = rc.makeGETRequest("https://studev.groept.be/api/a21ib2a04/waterlevel" );
         rc.parseJSON(response);
         System.out.println(rc.parseJSON(response));
     }
+
+   */
 }
 
 

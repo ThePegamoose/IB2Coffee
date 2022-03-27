@@ -140,24 +140,16 @@ def makecoffee():
     GPIO.output(BUZZER, buzzState)
 
 def getTemp():
-    A = 2.132014369*(10**-3)   # constants for equation
-    B = 0.5655571146*(10**-4)
-    C = 12.04690807*(10**-7)
-    tmp = MCP3008(channel=0, device=0)
-    R1 = 10000
-    V = 3.3*tmp
-    R = (V*R1)/(3.3-V)
-    #print(R)
-    Tk = 1/(A+B*ln(R)+C*((ln(R)) ** 3))
+    tmp = MCP3008(channel=0, clock_pin=11, mosi_pin = 10, miso_pin = 9, select_pin = 5)
+    V = tmp.value
+    Tk = -226.8*V+412.15
     Tc = Tk-273
     round_temperature = round(Tc)
-    #print(round_temperature)
     cursor = mydb.cursor()
     command = "REPLACE INTO `a21ib2a04`.`Settings` (`id`, `Setting`, `Value`) VALUES (%s, %s, %s);"
     value = (2, "temperature", round_temperature)
     cursor.execute(command, value)
     mydb.commit()
-
 
 
 def syncData():  # data is synced from db to list
@@ -228,28 +220,25 @@ def get_status():
 
 def checkalarm():
     syncData()  # alarm is synced with db
+
     currentTime = date_to_string(datetime.datetime.now())  # current time, converted to weekday format
-    coffeeTime = datetime.datetime.now() + datetime.timedelta(minutes=timeToMakeCoffee)  # before alarm time to make coffee
+    coffeeTime = datetime.datetime.now() + datetime.timedelta(minutes=3)  # before alarm time to make coffee
     coffeeTime2 = date_to_string(coffeeTime)  # coffee time, converted to weekday format
 
-    if currentTime in activeAlarm:  # checks regular alarm
-        buzzer = 1
-        activateServo = 0
-        status = "coffee finished, alarm bzz bzz"
-        print(status)
-
-    if coffeeTime2 in activeAlarm and activateServo == 0 and coffeeOn:  # checks coffee alarm
-        activateServo = 1
-        status = "started making coffee"
-        print(status)
+    if coffeeTime2 in activeAlarm:  # checks coffee alarm
+        print('coffee')
+        makecoffee()
+        requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/coffeeFinished")
 
 
 def checktimer():
     get_time()
     for timer in timerList:
         if timer[0] == 1:
+
             time.sleep(timer[1]-timeToMakeCoffee)
             makecoffee()
+            requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/coffeeFinished")
 
 def get_time():
     timerList.clear()

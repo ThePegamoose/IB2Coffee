@@ -29,14 +29,17 @@ public class CountTimer extends JDialog{
         chooseTimer = new JButton();
         chooseTimer.setText("Choose an existing timer");
         timerDisplay = new JLabel();
-        timerDisplay.setText("-");
+        timerDisplay.setText("00:00");
 
+        /*
         Object[] options = {"OK",
                 "Set New Alarm",
                 "Cancel"};
 
+         */
 
-        DBTest timerDB = new DBTest();
+
+        DB timerDB = new DB();
         String timer = timerDB.makeGETRequest("https://studev.groept.be/api/a21ib2a04/timerAll");
         String timerVal = timerDB.parseJSON(timer,"timerValue");
 
@@ -60,7 +63,7 @@ public class CountTimer extends JDialog{
                     timer1.stop();
                 }
                 timerDisplay.setText("00:00");
-                DBTest setReset = new DBTest();
+                DB setReset = new DB();
                 Object result = JOptionPane.showInputDialog(null, "In how many minutes would you like your coffee?", "Timer", JOptionPane.PLAIN_MESSAGE,null, fixedTimerArray, fixedTimerArray[0]);
                 if(result!=null){
                     setReset.makeGETRequest("https://studev.groept.be/api/a21ib2a04/clearActiveTimer");
@@ -79,7 +82,7 @@ public class CountTimer extends JDialog{
                     timer1.stop();
                 }
                 timerDisplay.setText("00:00");
-                DBTest addNew = new DBTest();
+                DB addNew = new DB();
                 Object time = JOptionPane.showInputDialog(null, "New Timer");
                 if(time!=null) {
                     if (Arrays.asList(fixedTimerArray).contains(time)) {
@@ -102,10 +105,26 @@ public class CountTimer extends JDialog{
             };
         });
 
+        JButton stop = new JButton("Stop Timer");
+        stop.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                DB reset = new DB();
+                reset.makeGETRequest("https://studev.groept.be/api/a21ib2a04/clearActiveTimer");
+                if(timer1!=null) {
+                    timer1.stop();
+                    timerDisplay.setText("00:00");
+
+                }
+            }
+
+        });
+
         timerPanel.setLayout(new BoxLayout(timerPanel, BoxLayout.Y_AXIS));
         timerDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
         newTimer.setAlignmentX(Component.CENTER_ALIGNMENT);
         chooseTimer.setAlignmentX(Component.CENTER_ALIGNMENT);
+        stop.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         timerDisplay.setFont(timerDisplay.getFont().deriveFont(64f));
 
@@ -118,6 +137,7 @@ public class CountTimer extends JDialog{
         timerPanel.add(timerDisplay);
         timerPanel.add(chooseTimer);
         timerPanel.add(newTimer);
+        timerPanel.add(stop);
         this.setContentPane(timerPanel);
     }
 
@@ -152,18 +172,20 @@ public class CountTimer extends JDialog{
                     ddMinute = dFormat.format(minute);
                     timerDisplay.setText(ddMinute + ":" + ddSecond);
                 }
-                if (minute == 0 && second == 0) {
-                    timer1.stop();
+                if (minute == -1) {
+                    //timer1.restart();
+                    ddMinute = dFormat.format(Integer.valueOf(time)-1);
+                    timerDisplay.setText(ddMinute + ":" + ddSecond);
+                    /*
+                    TempDisplay temp = new TempDisplay();
+                    temp.setSize(new Dimension(300, 150));
+                    temp.setVisible(true);
+
+                     */
+
                 }
             }
         });
-    }
-
-
-    public void resetTimer(Timer timer)
-    {
-        timer.stop();
-        timer.restart();
     }
 
 
