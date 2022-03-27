@@ -186,9 +186,29 @@ public class CountTimer extends JDialog{
                     ddMinute = dFormat.format(minute);
                     timerDisplay.setText(ddMinute + ":" + ddSecond);
                 }
-                if (minute == 0 && second == 0) {
-                    timer1.stop();
+                if (minute < 0 && (second <= 59 && second > 55)) {
+                    timerDisplay.setText("00:00");
+                }
+                else if (minute < 0){
+                    minute = Integer.valueOf(time);
+                    second = 0;
+                    ddSecond = dFormat.format(second);
+                    ddMinute = dFormat.format(minute);
+                    timerDisplay.setText(ddMinute + ":" + ddSecond);
+                    //timer1.stop();
+                    /*
                     timerDisplay.setText("Making coffee every" + time + "minutes");
+                    public void countdown(String time) {
+                        DecimalFormat dFormat = new DecimalFormat("00");
+                        minute = Integer.valueOf(time);
+                        second = 0;
+                        timer1 = new javax.swing.Timer(1000, new ActionListener() {
+
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+
+                            }
+                        });
                     //timer2.start();
                     /*
                     DB continuity = new DB();
@@ -223,6 +243,17 @@ public class CountTimer extends JDialog{
                 }
             }
         });
+/*
+        timer2 = new javax.swing.Timer(minute*60000+5000, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                timer2.stop();
+                countdown(time);
+            }
+        });
+
+ */
     }
 
 
