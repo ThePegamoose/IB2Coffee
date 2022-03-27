@@ -23,6 +23,7 @@ public class CoffeeHome extends JFrame{
     private JButton btn_settings;
     private JLabel WeeklyIntake;
     private JTextArea textArea1;
+    private JButton btn_CoffeeNow;
 
     private String check;
     //private TempDisplay tempDP;
