@@ -109,9 +109,10 @@ public class CoffeeHome extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 String info = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getSetting/coffeeFinished");
                 check = db.parseJSON(info,"Value");
-                System.out.println(check);
+                //System.out.println(check);
                 if (check.equals("1")){
                     TempDisplay tempDP = new TempDisplay();
+                    tempDP.setSize(new Dimension(300, 150));
                     tempDP.setVisible(true);
                     db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/coffeeFinished");
 

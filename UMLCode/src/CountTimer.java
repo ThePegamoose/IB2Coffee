@@ -17,6 +17,8 @@ public class CountTimer extends JDialog{
     private JLabel timerDisplay;
     private JPanel timerPanel;
     private javax.swing.Timer timer1;
+    private javax.swing.Timer timer2;
+    private String timerTime;
 
     public CountTimer()
     {
@@ -30,6 +32,11 @@ public class CountTimer extends JDialog{
         chooseTimer.setText("Choose an existing timer");
         timerDisplay = new JLabel();
         timerDisplay.setText("00:00");
+
+
+        //timer2.start();
+
+
 
         /*
         Object[] options = {"OK",
@@ -68,9 +75,10 @@ public class CountTimer extends JDialog{
                 if(result!=null){
                     setReset.makeGETRequest("https://studev.groept.be/api/a21ib2a04/clearActiveTimer");
                     setReset.makeGETRequest("https://studev.groept.be/api/a21ib2a04/setTimer/" + result );
-                    countdown(String.valueOf(result));
-                    timer1.start();
-                    run();
+                        timerTime = String.valueOf(result);
+                        countdown(String.valueOf(result));
+                        timer1.start();
+                    //run();
                 }
             };
         });
@@ -89,18 +97,22 @@ public class CountTimer extends JDialog{
                         JOptionPane.showMessageDialog(null, "This timer already exists");
                         addNew.makeGETRequest("https://studev.groept.be/api/a21ib2a04/clearActiveTimer");
                         addNew.makeGETRequest("https://studev.groept.be/api/a21ib2a04/setTimer/" + time);
-                        countdown(String.valueOf(time));
-                        timer1.start();
+                            timerTime = String.valueOf(time);
+                            countdown(String.valueOf(time));
+                            timer1.start();
+
                     } else {
                         addNew.makeGETRequest("https://studev.groept.be/api/a21ib2a04/newTimer/" + time);
                         addNew.makeGETRequest("https://studev.groept.be/api/a21ib2a04/clearActiveTimer");
                         addNew.makeGETRequest("https://studev.groept.be/api/a21ib2a04/setTimer/" + time);
                         JOptionPane.showMessageDialog(null, "Timer added successfully");
-                        countdown(String.valueOf(time));
-                        timer1.start();
+                            timerTime = String.valueOf(time);
+                            countdown(String.valueOf(time));
+                            timer1.start();
+
                     }
                 }
-                run();
+                //run();
 
             };
         });
@@ -141,7 +153,7 @@ public class CountTimer extends JDialog{
         this.setContentPane(timerPanel);
     }
 
-
+/*
     public void run() {
         try {
             Runtime runtime = Runtime.getRuntime();
@@ -151,6 +163,8 @@ public class CountTimer extends JDialog{
             System.out.println(e);
         }
     }
+
+ */
 
     public void countdown(String time) {
         DecimalFormat dFormat = new DecimalFormat("00");
@@ -172,11 +186,34 @@ public class CountTimer extends JDialog{
                     ddMinute = dFormat.format(minute);
                     timerDisplay.setText(ddMinute + ":" + ddSecond);
                 }
-                if (minute == -1) {
-                    //timer1.restart();
-                    ddMinute = dFormat.format(Integer.valueOf(time)-1);
-                    timerDisplay.setText(ddMinute + ":" + ddSecond);
+                if (minute == 0 && second == 0) {
+                    timer1.stop();
+                    timerDisplay.setText("Making coffee every" + time + "minutes");
+                    //timer2.start();
                     /*
+                    DB continuity = new DB();
+                    String cont = continuity.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getSetting/continuous");
+                    String start = continuity.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getSetting/coffeeStart");
+                    if (cont.equals("1") && start.equals("1")) {
+
+                        timer1.stop();
+                        countdown(time);
+
+
+                        minute = Integer.valueOf(time);
+                        ddMinute = dFormat.format(Integer.valueOf(time) - 1);
+                        timerDisplay.setText(ddMinute + ":" + ddSecond);
+
+
+                    }
+                    //else if ()
+                    if (){
+                        timer1.stop();
+                        timer1.start();
+                    }
+
+
+
                     TempDisplay temp = new TempDisplay();
                     temp.setSize(new Dimension(300, 150));
                     temp.setVisible(true);

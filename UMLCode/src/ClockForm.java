@@ -61,7 +61,7 @@ public class ClockForm extends JDialog {
                 String SetDay=(String)Day.getSelectedItem();
                 String SetMinute=(String)Minute.getSelectedItem();
                 String time=SetDay+SetHour+SetMinute;
-                System.out.println(time);
+                //System.out.println(time);
                 setReset.makeGETRequest("http://mysql.studev.groept.be/api/a21ib2a04/newAlarm/"+time);
 
 
