@@ -253,6 +253,7 @@ def get_time():
 
 
 while True:
+    getTemp()
     checkwaterlevel()
     getData()
     syncData()
@@ -264,4 +265,4 @@ while True:
         makecoffee()
         requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/mode")
 
-    getTemp()
+
