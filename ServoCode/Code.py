@@ -260,4 +260,8 @@ while True:
         checktimer()
     elif mode == 1:
         checkalarm()
+    elif mode == 2:
+        makecoffee()
+        requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/0/mode")
+
     getTemp()
