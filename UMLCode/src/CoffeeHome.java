@@ -189,7 +189,7 @@ public class CoffeeHome extends JFrame{
         String water ="0";
         CoffeeHome  frame = new CoffeeHome( "CoffeeApp");
         frame.setVisible(true);
-        frame.setSize(505,300);
+        frame.setSize(550,300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         DB db = new DB();
         db.parseJSON(db.makeGETRequest( "https://studev.groept.be/api/a21ib2a04/waterlevel"),"Value");
