@@ -80,8 +80,8 @@ public class CoffeeHome extends JFrame{
         btn_CoffeeNow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null,"Dont forget to place your coffee cup");
-
+                cupPopup();
+                dbMode.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/2/mode");
             }
         });
     }

@@ -12,9 +12,9 @@ import json
 import requests
 
 
-turnOnTime = 0  # time the coffee machine takes to heat
-makeCoffeeTime = 0  # time the heated machine takes to make coffee
-timeToMakeCoffee = 0  # total time it takes to make coffee
+turnOnTime = 0  # time the coffee machine takes to heat (s)
+makeCoffeeTime = 0  # time the heated machine takes to make coffee (s)
+timeToMakeCoffee = 0  # total time it takes to make coffee (s)
 cupSize = 0  # 0 if small , 1 if big
 timesBeep = 5
 mode = 0
@@ -222,7 +222,7 @@ def checkalarm():
     syncData()  # alarm is synced with db
 
     currentTime = date_to_string(datetime.datetime.now())  # current time, converted to weekday format
-    coffeeTime = datetime.datetime.now() + datetime.timedelta(minutes=3)  # before alarm time to make coffee
+    coffeeTime = datetime.datetime.now() + datetime.timedelta(minutes=timeToMakeCoffee)  # before alarm time to make coffee
     coffeeTime2 = date_to_string(coffeeTime)  # coffee time, converted to weekday format
 
     if coffeeTime2 in activeAlarm:  # checks coffee alarm
