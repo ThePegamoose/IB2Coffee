@@ -23,6 +23,7 @@ public class CoffeeHome extends JFrame{
     private JButton btn_settings;
     private JLabel WeeklyIntake;
     private JTextArea textArea1;
+    private JButton btn_CoffeeNow;
 
     private String check;
     //private TempDisplay tempDP;
@@ -75,6 +76,14 @@ public class CoffeeHome extends JFrame{
             }
         });
         checkStats();
+        
+        btn_CoffeeNow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null,"Dont forget to place your coffee cup");
+
+            }
+        });
     }
     public  void cupPopup(){
 
@@ -180,7 +189,7 @@ public class CoffeeHome extends JFrame{
         String water ="0";
         CoffeeHome  frame = new CoffeeHome( "CoffeeApp");
         frame.setVisible(true);
-        frame.setSize(505,300);
+        frame.setSize(550,300);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         DB db = new DB();
         db.parseJSON(db.makeGETRequest( "https://studev.groept.be/api/a21ib2a04/waterlevel"),"Value");
