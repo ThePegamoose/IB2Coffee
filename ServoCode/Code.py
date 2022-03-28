@@ -1,4 +1,5 @@
 import datetime
+from math import ceil
 import mysql.connector
 from gpiozero import DigitalInputDevice
 import time
@@ -224,11 +225,11 @@ def checkalarm():
     syncData()  # alarm is synced with db
 
     currentTime = date_to_string(datetime.datetime.now())  # current time, converted to weekday format
-    coffeeTime = datetime.datetime.now() + datetime.timedelta(minutes=timeToMakeCoffee)  # before alarm time to make coffee
+    coffeeTime = datetime.datetime.now() + datetime.timedelta(minutes=ceil(timeToMakeCoffee/60))  # before alarm time to make coffee
     coffeeTime2 = date_to_string(coffeeTime)  # coffee time, converted to weekday format
 
     if coffeeTime2 in activeAlarm:  # checks coffee alarm
-        print('coffee')
+        #print('coffee')
         makecoffee()
 
 

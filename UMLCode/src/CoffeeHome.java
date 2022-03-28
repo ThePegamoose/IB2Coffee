@@ -74,13 +74,23 @@ public class CoffeeHome extends JFrame{
 
             }
         });
-        checkStats();
+        Timer timer = new javax.swing.Timer(2500, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                checkStats();
+
+            }
+        });
+        timer.start();
+
         
         btn_CoffeeNow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cupPopup();
                 dbMode.makeGETRequest("https://studev.groept.be/api/a21ib2a04/UpdateSetting/2/mode");
+                temperaturePopUp();
             }
         });
     }
