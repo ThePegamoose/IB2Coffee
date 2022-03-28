@@ -63,7 +63,7 @@ public class ClockForm extends JDialog {
                 String time=SetDay+SetHour+SetMinute;
                 //System.out.println(time);
                 setReset.makeGETRequest("http://mysql.studev.groept.be/api/a21ib2a04/newAlarm/"+time);
-
+                setReset.makeGETRequest("http://mysql.studev.groept.be/api/a21ib2a04/setAlarm/"+time);
 
 
             }

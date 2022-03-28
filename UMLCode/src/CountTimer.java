@@ -186,7 +186,7 @@ public class CountTimer extends JDialog{
                     ddMinute = dFormat.format(minute);
                     timerDisplay.setText(ddMinute + ":" + ddSecond);
                 }
-                if (minute < 0 && (second <= 59 && second > 55)) {
+                if (minute < 0 && (second <= 59 && second > 51)) {
                     timerDisplay.setText("00:00");
                 }
                 else if (minute < 0){

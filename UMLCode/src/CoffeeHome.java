@@ -26,7 +26,6 @@ public class CoffeeHome extends JFrame{
     private JButton btn_CoffeeNow;
 
     private String check;
-    //private TempDisplay tempDP;
 
 
     public CoffeeHome(String title) {
@@ -94,7 +93,6 @@ public class CoffeeHome extends JFrame{
         DB db = new DB();
         String info = db.makeGETRequest("https://studev.groept.be/api/a21ib2a04/getSetting/waterStatus");
         String checkWater = db.parseJSON(info,"Value");
-        //System.out.println(check);
         if (checkWater.equals("0")) {
             JOptionPane.showMessageDialog(null, "Not enough water");
         }
@@ -138,11 +136,6 @@ public class CoffeeHome extends JFrame{
 
     }
 
-    public String checkFinished(){
-
-        return check;
-
-    }
 
     public void checkStats(){
         Date d = new Date();

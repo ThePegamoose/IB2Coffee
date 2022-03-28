@@ -125,7 +125,7 @@ def turn_servo(gpio):
 def makecoffee():
     global buzzState
     updateStats()
-    turn_servo(17)  # 17 27 22
+    turn_servo(17)  # 17(on) 27(small cup) 22(large cup)
     sleep(turnOnTime)
     if cupSize == 0:
         turn_servo(27)
@@ -138,6 +138,8 @@ def makecoffee():
         time.sleep(1)
     buzzState = False
     GPIO.output(BUZZER, buzzState)
+    turn_servo(17)
+    requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/coffeeFinished")
 
 def getTemp():
     tmp = MCP3008(channel=0, clock_pin=11, mosi_pin = 10, miso_pin = 9, select_pin = 5)
@@ -228,7 +230,6 @@ def checkalarm():
     if coffeeTime2 in activeAlarm:  # checks coffee alarm
         print('coffee')
         makecoffee()
-        requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/coffeeFinished")
 
 
 def checktimer():
@@ -238,7 +239,7 @@ def checktimer():
 
             time.sleep(timer[1]-timeToMakeCoffee)
             makecoffee()
-            requests.get("https://studev.groept.be/api/a21ib2a04/UpdateSetting/1/coffeeFinished")
+
 
 def get_time():
     timerList.clear()
